@@ -111,6 +111,17 @@ class AOSHandler(SimpleHTTPRequestHandler):
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
             self.wfile.write(response_data.encode('utf-8'))
+        elif self.path == '/api/new_chat':
+            import time
+            context_manager.active_context = []
+            if os.path.exists(HISTORY_FILE):
+                os.rename(HISTORY_FILE, f"archive_{int(time.time())}_{HISTORY_FILE}")
+            
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps({"status": "success"}).encode('utf-8'))
         else:
             self.send_error(404, "Not Found")
 

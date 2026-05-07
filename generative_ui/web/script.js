@@ -2,6 +2,7 @@ const feed = document.getElementById('feed');
 const input = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 const closeBtn = document.getElementById('close-btn');
+const newChatBtn = document.getElementById('new-chat-btn');
 
 const viewHome = document.getElementById('view-home');
 const viewIntent = document.getElementById('view-intent');
@@ -37,6 +38,25 @@ closeBtn.addEventListener('click', () => {
     viewIntent.classList.remove('active');
     viewHome.classList.add('active');
 });
+
+if(newChatBtn) {
+    newChatBtn.addEventListener('click', async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/new_chat', { method: 'POST' });
+            if(response.ok) {
+                feed.innerHTML = `
+                    <div class="message system">
+                        <div class="bubble">
+                            <p>Latent Kernel Ready. Awaiting Intent.</p>
+                        </div>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error starting new chat:', error);
+        }
+    });
+}
 
 // Chat Logic
 function addMessage(text, isUser = false) {
