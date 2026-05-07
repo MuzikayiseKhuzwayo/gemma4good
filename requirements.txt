@@ -1,0 +1,7 @@
+asyncio
+transformers
+torch
+accelerate
+requests
+google-genai
+python-dotenv

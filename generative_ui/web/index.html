@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AOS Interface</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="phone-container">
+        <div class="phone-hardware">
+            <div class="notch"></div>
+            
+            <!-- Home Screen View -->
+            <div class="screen view-home active" id="view-home">
+                <div class="status-bar">
+                    <span class="time" id="home-time">9:41</span>
+                    <div class="icons">
+                        <span class="signal">📶</span>
+                        <span class="battery">🔋</span>
+                    </div>
+                </div>
+                <div class="home-center">
+                    <div class="aos-orb"></div>
+                    <h1 class="clock-large" id="home-clock-large">09:41</h1>
+                    <p class="date-large">Gemma 4 Active</p>
+                </div>
+                <div class="home-footer">
+                    <p class="pulse-text">Tap anywhere to state intent</p>
+                </div>
+            </div>
+
+            <!-- Intent Interface View -->
+            <div class="screen view-intent" id="view-intent">
+                <header class="glass-header">
+                    <div class="status-bar">
+                        <span class="time">9:41</span>
+                        <div class="icons">
+                            <span class="signal">📶</span>
+                            <span class="battery">🔋</span>
+                        </div>
+                    </div>
+                    <div class="header-content">
+                        <h1>AOS</h1>
+                        <span class="status-dot"></span>
+                        <span class="status-text">Listening...</span>
+                    </div>
+                </header>
+                
+                <main class="feed" id="feed">
+                    <div class="message system">
+                        <div class="bubble">
+                            <p>Latent Kernel Ready. Awaiting Intent.</p>
+                        </div>
+                    </div>
+                </main>
+                
+                <footer class="input-area glass-footer">
+                    <div class="input-wrapper">
+                        <button class="icon-btn" id="close-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                        <input type="text" id="user-input" placeholder="State your intent..." autocomplete="off">
+                        <button class="icon-btn send-btn" id="send-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
