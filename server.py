@@ -85,18 +85,22 @@ class AOSHandler(SimpleHTTPRequestHandler):
                     try:
                         result = agent.execute_intent(intent_type, payload)
                         execution_logs.append(f"[{intent_type}] Result: {result}")
-                        responses.append(f"[{intent_type}] Executed successfully.\nResult: {result}")
+                        
+                        # Show intent mapping instead of raw result
+                        payload_str = json.dumps(payload)
+                        responses.append(f"[{intent_type}] -> {payload_str}")
+                        
                         context_manager.active_context.append(f"Kernel Reasoned: {thought} | OS Executed: {intent_type} with result: {result}")
                     except Exception as e:
                         execution_logs.append(f"[{intent_type}] Failed: {str(e)}")
-                        responses.append(f"[{intent_type}] Execution failed: {str(e)}")
+                        responses.append(f"[{intent_type}] ❌ Execution failed.")
                 
                 # 3. Formulate natural language response if OS actions were taken
                 has_notify = any(i.get("type") == "NOTIFY_USER" for i in intents)
                 if execution_logs and not has_notify:
                     print("--- Formulating Natural Language Response ---")
                     nl_response = inference_engine.generate_response(user_intent, execution_logs)
-                    responses.append(f"🤖 {nl_response}")
+                    responses.append(f"🤖 Result:\n{nl_response}")
                     
             # Combine all responses into a single bubble
             if responses:
