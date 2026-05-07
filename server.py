@@ -97,6 +97,11 @@ class AOSHandler(SimpleHTTPRequestHandler):
                     print("--- Formulating Natural Language Response ---")
                     nl_response = inference_engine.generate_response(user_intent, execution_logs)
                     responses.append(f"🤖 {nl_response}")
+                    
+            # Combine all responses into a single bubble
+            if responses:
+                combined_response = "\n\n".join(responses)
+                responses = [combined_response]
             
             history = load_history()
             history.append({"role": "user", "text": user_intent})
