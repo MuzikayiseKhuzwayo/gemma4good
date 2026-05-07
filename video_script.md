@@ -13,17 +13,35 @@
 *   **[Visual 0:15 - 0:30]:** Big red 'X' over the desktop. Fade to black. The words **"The Luggage Problem"** appear on screen, followed by **"What if the AI was the Operating System?"**
 
 ## 🎬 Part 2: The Agentic Solution (0:30 - 2:00)
-**Goal:** Show the interface solving complex problems locally, without apps.
+**Goal:** Show the interface solving complex problems locally, without apps, through a genuine multi-step interaction.
 
-*   **[Visual 0:30 - 0:45]:** A clean, dark-mode terminal or minimalist overlay appears. The text types out: `Booting Agentic OS... Initializing Latent Kernel... Model: Gemma-4-31b-it (Local Edge)`.
-*   **[Voiceover]:** "Meet the Agentic OS. We’ve deprecated the traditional application layer. Instead of launching apps, we’ve embedded Gemma 4 directly as the system's core kernel."
-*   **[Visual 0:45 - 1:15]:** The user types a single, complex command into the prompt: *"I need to prepare for my class. Search my memory for the Solar System lesson plan, save a summary to /docs/summary.txt, and notify me when it's done."* 
-*   **[Voiceover]:** "Watch what happens. The user simply states their intent. Running entirely on local hardware, the Gemma Latent Kernel parses the natural language. It doesn't rely on the cloud. It doesn't open a word processor."
-*   **[Visual 1:15 - 2:00]:** The screen shows the clean, sequential execution output from the OS (similar to our `test_all_intents.py` output):
-    *   `[VirtualOS] Mapping intent: SEARCH_MEMORY...`
-    *   `[VirtualOS] Mapping intent: WRITE_FILE -> /docs/summary.txt`
-    *   `[VirtualOS] Mapping intent: NOTIFY_USER -> "Class prep complete."`
-*   **[Voiceover]:** "Gemma 4 breaks the prompt down, generates a deterministic JSON execution plan via its internal thought process, and routes the tasks directly to the local system APIs. It handles file I/O, semantic search, and user notifications completely autonomously."
+*   **[Visual 0:30 - 0:40]:** A clean, dark-mode generative web UI appears. The text types out: `Booting Agentic OS... Initializing Latent Kernel... Model: Gemma-4-31b-it (Local Edge)`.
+*   **[Voiceover]:** "Meet the Agentic OS. We’ve deprecated the traditional application layer. Instead of launching apps, we’ve embedded Gemma 4 directly as the system's core kernel. Let's look at a genuine interaction."
+
+**Command 1: RAG & File I/O**
+*   **[Visual 0:40 - 0:55]:** User Prompt: *"Search my memory for the Solar System lesson plan and save a summary to /docs/summary.txt."* 
+    *   `[Kernel] Mapping intent: SEARCH_MEMORY -> "Solar System"`
+    *   `[Kernel] Mapping intent: WRITE_FILE -> /docs/summary.txt`
+*   **[Voiceover]:** "The user simply states their intent. The Latent Kernel parses this and performs Semantic Retrieval, bypassing folders entirely, then maps a `WRITE_FILE` intent directly to the virtual file system. No word processors needed."
+
+**Command 2: Interactive Context Gathering**
+*   **[Visual 0:55 - 1:15]:** User Prompt: *"Send this summary to the Principal."*
+    *   `[Kernel] Mapping intent: ASK_USER_INPUT -> "I lack the Principal's local network ID. Please provide it."`
+    *   *(User provides ID: 192.168.1.5)*
+    *   `[Kernel] Mapping intent: SEND_MESSAGE -> 192.168.1.5`
+*   **[Voiceover]:** "Here we see the ReAct loop in action. The Kernel detects missing context and issues an `ASK_USER_INPUT` intent, proving the OS is interactive, not just a static script. Once provided, it routes the message."
+
+**Command 3: File System Manipulation**
+*   **[Visual 1:15 - 1:35]:** User Prompt: *"Read the old curriculum draft, and since it's outdated, delete it from the system."*
+    *   `[Kernel] Mapping intent: READ_FILE -> /docs/old_draft.txt`
+    *   `[Kernel] Mapping intent: DELETE_FILE -> /docs/old_draft.txt`
+*   **[Voiceover]:** "The system executes a `READ_FILE` intent, loading data into its token budget. It reasons over the content, then safely invokes `DELETE_FILE` using its strict JSON API schema—without user micro-management."
+
+**Command 4: System State & Notifications**
+*   **[Visual 1:35 - 2:00]:** User Prompt: *"Distribute the new lesson plan to the offline student mesh and notify me when done."*
+    *   `[Kernel] Mapping intent: SEND_MESSAGE -> [student_mesh_group]`
+    *   `[Kernel] Mapping intent: NOTIFY_USER -> "Distribution complete."`
+*   **[Voiceover]:** "Finally, it orchestrates network distribution via `SEND_MESSAGE` and updates the generative UI state with a `NOTIFY_USER` callback. Gemma 4 breaks the prompts down, generates deterministic JSON execution plans, and handles OS operations completely autonomously."
 
 ## 🎬 Part 3: Technical Validation (2:00 - 3:00)
 **Goal:** Prove the code works and highlight why Gemma 4 was used.
