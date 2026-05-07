@@ -135,3 +135,35 @@ class GemmaLatentKernel:
             except Exception as e:
                 print(f"Failed to parse model output: {e}")
                 return []
+
+    def generate_response(self, user_prompt, execution_logs):
+        """
+        Generates a natural language response based on the results of the OS execution.
+        """
+        system_prompt = (
+            "You are the Agentic OS interface. "
+            "The user made a request, and the system executed background tasks. "
+            "Explain the results to the user in a natural, helpful, and concise way. "
+            "Do NOT use JSON. If a search returned empty ([]), inform the user that no files were found. "
+            "If a file was successfully written (True), confirm it to the user."
+        )
+        prompt = f"{system_prompt}\n\nUser Request: {user_prompt}\nSystem Execution Logs: {execution_logs}\n\nResponse:"
+        
+        if self.mode == "mock":
+            return f"System operations completed based on your request. Logs: {execution_logs}"
+            
+        elif self.mode == "google_genai":
+            try:
+                response = self.client.models.generate_content(
+                    model=self.model_name,
+                    contents=prompt
+                )
+                return response.text.strip()
+            except Exception as e:
+                return f"Execution completed: {execution_logs}"
+                
+        elif self.mode == "local":
+            inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
+            outputs = self.model.generate(**inputs, max_new_tokens=150)
+            return self.tokenizer.decode(outputs[0], skip_special_tokens=True).split("Response:")[-1].strip()
+
