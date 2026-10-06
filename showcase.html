@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AOS — Agentic Operating System powered by Gemma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #06080d;
+            --bg-card: rgba(14, 19, 31, 0.7);
+            --bg-card-hover: rgba(22, 30, 49, 0.85);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(0, 229, 255, 0.3);
+            --cyan: #00e5ff;
+            --cyan-glow: rgba(0, 229, 255, 0.2);
+            --purple: #a855f7;
+            --purple-glow: rgba(168, 85, 247, 0.2);
+            --text-main: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        code, pre, .terminal-font {
+            font-family: 'Fira Code', monospace;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 80% 20%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Nav */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(6, 8, 13, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-card);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .orb-glow {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, var(--cyan), var(--purple));
+            box-shadow: 0 0 16px var(--cyan-glow);
+            animation: pulseOrb 4s infinite alternate;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #fff 40%, var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .btn-github {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-card);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-github:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* Hero */
+        .hero {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 24px 40px 24px;
+            text-align: center;
+        }
+
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid rgba(0, 229, 255, 0.25);
+            color: var(--cyan);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-lead {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 780px;
+            margin: 0 auto 36px auto;
+            line-height: 1.6;
+        }
+
+        .cta-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9, #6366f1);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-card);
+            color: var(--text-main);
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Interactive Terminal Emulator */
+        .terminal-wrapper {
+            max-width: 900px;
+            margin: 0 auto 80px auto;
+            background: rgba(10, 14, 22, 0.9);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 229, 255, 0.1);
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .terminal-header {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border-card);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .control-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .terminal-title {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .terminal-body {
+            padding: 24px;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .term-prompt {
+            color: var(--cyan);
+            font-weight: 600;
+        }
+
+        .term-input {
+            color: #fff;
+            margin-left: 8px;
+        }
+
+        .term-breakdown {
+            margin-top: 16px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            border-left: 3px solid var(--cyan);
+        }
+
+        .step-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .tag-micro { background: rgba(0, 229, 255, 0.2); color: var(--cyan); }
+        .tag-deep { background: rgba(168, 85, 247, 0.2); color: var(--purple); }
+        .tag-sec { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .tag-hal { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+
+        /* Feature Grid */
+        .section-wrap {
+            max-width: 1100px;
+            margin: 0 auto 100px auto;
+            padding: 0 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-highlight);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 18px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Diataxis Grid */
+        .diataxis-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .quadrant-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 30px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .quadrant-card:hover {
+            border-color: var(--cyan);
+            background: var(--bg-card-hover);
+            transform: translateY(-3px);
+        }
+
+        .quadrant-badge {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--cyan);
+            margin-bottom: 12px;
+        }
+
+        .quadrant-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .quadrant-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .card-link {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--cyan);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-card);
+            padding: 48px 32px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--cyan);
+        }
+
+        @keyframes pulseOrb {
+            0% { transform: scale(1); filter: brightness(1); }
+            100% { transform: scale(1.15); filter: brightness(1.3); }
+        }
+
+        @media (max-width: 900px) {
+            h1 { font-size: 40px; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .diataxis-grid { grid-template-columns: 1fr; }
+            nav { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav>
+        <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good" class="logo-wrap">
+            <div class="orb-glow"></div>
+            <span class="logo-text">AOS</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good/blob/main/docs/tutorials/getting-started.md">Tutorials</a>
+            <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good/blob/main/docs/how-to/add-custom-intent.md">How-To</a>
+            <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good/blob/main/docs/reference/rest-api.md">API Reference</a>
+            <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good/blob/main/docs/explanation/architecture.md">Architecture</a>
+            <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good" class="btn-github" target="_blank" rel="noopener">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                <span>GitHub</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="badge-pill">Google Gemma 4 Sovereign Computing</div>
+        <h1>The Agentic Operating System</h1>
+        <p class="hero-lead">
+            Moving beyond static desktop applications to an <strong>Inference Kernel → Hardware Abstraction Layer → Agentic Intent</strong> paradigm. Local-first, privacy-preserving, and engineered for edge environments.
+        </p>
+
+        <div class="cta-row">
+            <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good/blob/main/docs/tutorials/getting-started.md" class="btn-primary">Get Started in 10 Min</a>
+            <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good/blob/main/docs/explanation/architecture.md" class="btn-secondary">Read Architecture Spec</a>
+        </div>
+
+        <!-- Interactive Terminal Preview -->
+        <div class="terminal-wrapper">
+            <div class="terminal-header">
+                <div class="terminal-controls">
+                    <span class="control-dot dot-red"></span>
+                    <span class="control-dot dot-yellow"></span>
+                    <span class="control-dot dot-green"></span>
+                </div>
+                <div class="terminal-title">AOS Latent Kernel — Speculative Router v2.0.0</div>
+                <div style="font-size: 11px; color: var(--cyan);">Latency: 4.8ms</div>
+            </div>
+
+            <div class="terminal-body terminal-font">
+                <div><span class="term-prompt">AOS&gt;</span><span class="term-input">Send a message to Alice saying I will be late, and save a note.</span></div>
+                
+                <div class="term-breakdown">
+                    <div><span class="step-tag tag-micro">ROUTER</span> Routed to: Speculative Dual-Kernel (Score: 0.20 &lt; 0.5)</div>
+                    <div><span class="step-tag tag-deep">INTENT 1</span> SEND_MESSAGE {"to": "Alice", "body": "I will be late"}</div>
+                    <div><span class="step-tag tag-deep">INTENT 2</span> WRITE_FILE {"path": "/notes/late.txt", "content": "Told Alice I'd be late."}</div>
+                    <div><span class="step-tag tag-sec">SECURITY</span> Host Write Sandbox Check: Auto-Approved in Isolated Workspace</div>
+                    <div><span class="step-tag tag-hal">EXECUTION</span> VirtualOS Dispatch Complete (Network: api://messaging, File: /notes/late.txt)</div>
+                    <div style="color: var(--cyan); margin-top: 8px;">✓ Message dispatched to Alice. File saved to /notes/late.txt.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Capabilities Grid -->
+    <section class="section-wrap">
+        <div class="section-header">
+            <h2>Deterministic Edge Architecture</h2>
+            <p>Built from the ground up for zero-crash execution, strict least privilege, and air-gapped sovereignty.</p>
+        </div>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Speculative Dual-Kernel</h3>
+                <p>Sub-50ms deterministic regex and pattern routing via <code>GemmaMicroKernel</code>, with seamless speculative escalation to <code>GemmaDeepKernel</code> for multi-step reasoning.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Capability Security</h3>
+                <p>Least-privilege security model with automated unified diff generation. Host file modifications and network requests require explicit operator authorization.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>3-Tier Memory Paging</h3>
+                <p>Context budgeting with L1 Active Working Memory, L2 Episodic Compressed Memory, and L3 Persistent SQLite Vector Storage with on-demand page fault resolution.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Sovereign P2P Mesh</h3>
+                <p>Air-gapped peer discovery and task gossip over local UDP broadcasts (port 5005). Operates without cloud backends or external telemetry.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💻</div>
+                <h3>Isolated Code Sandbox</h3>
+                <p>Execute untrusted or dynamic Python scripts and WebAssembly modules with timeout protection, stdout/stderr capture, and isolated globals.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Associative Knowledge Graph</h3>
+                <p>Embedded SQLite entity-relationship triplets extracted from conversation traces, answering associative queries like <em>"Who did I talk to about Physics?"</em></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diátaxis Quadrant Navigation -->
+    <section class="section-wrap">
+        <div class="section-header">
+            <h2>Governed by the Diátaxis Framework</h2>
+            <p>Systematically organized for four distinct developer and user journeys.</p>
+        </div>
+
+        <div class="diataxis-grid">
+            <!-- Tutorials -->
+            <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good/blob/main/docs/tutorials/getting-started.md" class="quadrant-card">
+                <div>
+                    <div class="quadrant-badge">1. Tutorials (Learning-Oriented)</div>
+                    <h3>Getting Started in 10 Minutes</h3>
+                    <p>Zero-to-one developer quickstart guide covering virtual environment setup, configuration options, and state execution.</p>
+                </div>
+                <div class="card-link">Explore Tutorials →</div>
+            </a>
+
+            <!-- How-To -->
+            <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good/blob/main/docs/how-to/add-custom-intent.md" class="quadrant-card">
+                <div>
+                    <div class="quadrant-badge">2. How-To Guides (Problem-Oriented)</div>
+                    <h3>Add Custom Intents & Tool Schemas</h3>
+                    <p>Step-by-step recipes for declaring custom tool schemas, hooking them into the Shell Agent HAL, and handling callbacks.</p>
+                </div>
+                <div class="card-link">Read Recipes →</div>
+            </a>
+
+            <!-- Reference -->
+            <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good/blob/main/docs/reference/rest-api.md" class="quadrant-card">
+                <div>
+                    <div class="quadrant-badge">3. Reference (Information-Oriented)</div>
+                    <h3>Master Gateway REST & SSE API</h3>
+                    <p>Machine-accurate specifications for all 17 master gateway endpoints, grammar schemas, and SQLite database models.</p>
+                </div>
+                <div class="card-link">Inspect API Specs →</div>
+            </a>
+
+            <!-- Explanation -->
+            <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good/blob/main/docs/explanation/architecture.md" class="quadrant-card">
+                <div>
+                    <div class="quadrant-badge">4. Explanation (Understanding-Oriented)</div>
+                    <h3>Latent Kernel Paradigm & ADRs</h3>
+                    <p>Architectural narratives, mathematical models of context tiering, and formal Architectural Decision Records (ADRs).</p>
+                </div>
+                <div class="card-link">Read Architecture Spec →</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            Agentic Operating System (AOS) &bull; Released under the <a href="https://github.com/MuzikayiseKhuzwayo/gemma4good/blob/main/LICENSE">Apache 2.0 License</a> &bull; Powered by Google Gemma
+        </p>
+    </footer>
+
+</body>
+</html>

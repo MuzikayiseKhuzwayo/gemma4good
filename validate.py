@@ -1,7 +1,9 @@
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 import asyncio
 from dotenv import load_dotenv
 
-load_dotenv() # Load variables from .env before importing modules that need them
+load_dotenv()
 
 from aos_kernel.daemon import AOSDaemon
 from aos_kernel.inference import GemmaLatentKernel
@@ -14,8 +16,8 @@ async def run_validation():
     # Initialize components with Virtual OS enabled
     sfs = SemanticFileSystem()
     agent = ShellAgent(use_virtual_env=True)
-    kernel = AOSDaemon(fs=sfs, agent=agent)
     inference_engine = GemmaLatentKernel(mode="google_genai") # Options: "mock", "google_genai", "local" 
+    kernel = AOSDaemon(fs=sfs, agent=agent, inference_engine=inference_engine) 
     
     # The actual user prompt we want the Agentic OS to process
     user_prompt = "Send a message to Alice saying I will be late, and save a note."

@@ -24,7 +24,7 @@ The Local-First Interface for Low-Connectivity Environments
 ## Media
 
 **Card and Thumbnail Image**
-![Card and Thumbnail Image](file:///C:/Users/muzik/.gemini/antigravity/brain/0be83940-4e12-4b71-8c92-0a6f150660ac/aos_thumbnail_1778138650459.png)
+![Card and Thumbnail Image](docs/archive/hackathon/aos_thumbnail_1778138650459.png)
 *(Feel free to use the generated image above for the Card/Thumbnail).*
 
 **Media Gallery**

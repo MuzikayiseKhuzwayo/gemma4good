@@ -2,10 +2,12 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pytest_cache/
 
-# Environments
+# Environments & secrets
 .env
 .env.*
+!.env.example
 .venv
 env/
 venv/
@@ -13,12 +15,19 @@ ENV/
 env.bak/
 venv.bak/
 
-# Logs and databases
+# Logs, databases & runtime state
 *.log
 *.sqlite
+*.sqlite3
 *.db
+conversation_history.json
+archive_*.json
+/data/*.db
+/data/history_archive/
+/data/sandbox/
+/test_data/
 
-# VS Code / IDEs
+# VS Code / JetBrains / Editors
 .vscode/
 .idea/
 *.swp
@@ -32,7 +41,3 @@ venv.bak/
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# Any temporary test files or data directories
-/data/
-/test_data/

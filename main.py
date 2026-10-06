@@ -1,7 +1,9 @@
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 import asyncio
 from dotenv import load_dotenv
 
-load_dotenv() # Load variables from .env before importing modules that need them
+load_dotenv()
 
 from aos_kernel.daemon import AOSDaemon
 from shell_agent.api_mapper import ShellAgent

@@ -1,3 +1,5 @@
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 import asyncio
 from dotenv import load_dotenv
 
@@ -13,8 +15,8 @@ async def test_all_paths():
     
     sfs = SemanticFileSystem()
     agent = ShellAgent(use_virtual_env=True)
-    kernel = AOSDaemon(fs=sfs, agent=agent)
     inference_engine = GemmaLatentKernel(mode="google_genai")
+    kernel = AOSDaemon(fs=sfs, agent=agent, inference_engine=inference_engine)
     
     test_prompts = [
         "Write a file at /test/data.txt with the content 'Hello World'.",
@@ -47,7 +49,7 @@ async def test_all_paths():
                 print(f"Error executing {intent_type}: {e}")
         
         # Prevent rate limits
-        await asyncio.sleep(2)
+        await asyncio.sleep(0.1)
                 
     print("\n--- Final Virtual OS State ---")
     state = agent.virtual_os.get_state_summary()
